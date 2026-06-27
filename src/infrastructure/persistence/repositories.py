@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from typing import List
 
 from sqlalchemy import func, select
@@ -40,7 +41,11 @@ class SQLAlchemyAdRepository(AdRepository):
         self,
         ad_id: int,
     ) -> Ad | None:
-        raise NotImplementedError
+        query = select(AdModel).where(AdModel.id == ad_id)
+        result = await self._session.execute(query)
+        model = result.scalar()
+        return _to_entity(model)
+
 
     async def list(
         self,
@@ -71,7 +76,9 @@ class SQLAlchemyAdRepository(AdRepository):
         self,
         ad: Ad,
     ) -> None:
-        raise NotImplementedError
+
+        model = AdModel(**asdict(ad))
+        self._session.add(model)
 
 
 def _to_entity(model: AdModel) -> Ad:
