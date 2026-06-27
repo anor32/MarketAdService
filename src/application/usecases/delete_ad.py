@@ -15,6 +15,7 @@ class DeleteAd(DeleteAdPort):
                 raise AdNotFoundError
             if ad.user_id != user_id:
                 raise ForbiddenError
+
             ad.archive()
             await u.ads.save(ad)
             await self._uow.outbox.add("ad.deleted", payload={"ad_id": ad.id})
