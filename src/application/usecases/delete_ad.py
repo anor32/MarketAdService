@@ -17,5 +17,5 @@ class DeleteAd(DeleteAdPort):
                 raise ForbiddenError
             ad.archive()
             await u.ads.save(ad)
-            await self._uow.outbox.add('ad.deleted', payload={'ad_id': ad.id})
+            await self._uow.outbox.add("ad.deleted", payload={"ad_id": ad.id})
             await self._uow.commit()

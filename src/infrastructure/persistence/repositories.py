@@ -46,7 +46,6 @@ class SQLAlchemyAdRepository(AdRepository):
         model = result.scalar()
         return _to_entity(model)
 
-
     async def list(
         self,
         user_id: int | None,
