@@ -130,7 +130,7 @@ def _build_ad(item: dict, cities: list[str]) -> dict:
     return {
         "title": title,
         "description": f"{title}. В отличном состоянии,"
-                       f" есть все документы, возможен торг.",
+        f" есть все документы, возможен торг.",
         "price": max(0, base_price + random.randint(-jitter, jitter)),
         "category": category,
         "city": random.choice(cities),
@@ -228,7 +228,6 @@ async def main() -> None:
 
         logger.info("=== search: waiting for eventual consistency ===")
         await asyncio.sleep(3)
-
         res = await search(client, q="macbook")
         logger.info(
             "GET /search?q=macbook → total=%s, first=%s",
