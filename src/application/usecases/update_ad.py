@@ -1,3 +1,5 @@
+from dataclasses import asdict
+
 from src.application.exceptions import AdNotFoundError, ForbiddenError
 from src.application.ports.uow import UnitOfWork
 from src.application.ports.usecases import UpdateAdPort
@@ -27,7 +29,7 @@ class UpdateAd(UpdateAdPort):
             args = locals()
             for key,value in args.items():
                 if value is None:
-                    args[key] = 'd'
+                    args[key] = asdict(ad)[key]
             ad.edit(args['title'], args['description'], args['price'], args['category'], args['city'])
             await self._uow.ads.save(ad)
             await self._uow.outbox.add('ad.updated', payload={'ad_id': ad.id})
