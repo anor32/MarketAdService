@@ -9,23 +9,23 @@ class UpdateAd(UpdateAdPort):
         self._uow = uow
 
     async def execute(
-        self,
-        ad_id: int,
-        user_id: int,
-        title: str | None,
-        description: str | None,
-        price: int | None,
-        category: str | None,
-        city: str | None,
+            self,
+            ad_id: int,
+            user_id: int,
+            title: str | None,
+            description: str | None,
+            price: int | None,
+            category: str | None,
+            city: str | None,
     ) -> Ad:
         async with self._uow as u:
-         ad = await u.ads.get_by_id(ad_id)
-         if not ad or ad.status == AdStatus.ARCHIVED:
-             raise AdNotFoundError
-         if ad.user_id != user_id:
-             raise ForbiddenError
-         ad.edit(title,description, price, category, city)
-         await self._uow.ads.save(ad)
-         await self._uow.outbox.add('ad.updated',payload={'ad_id':ad.id})
-         await self._uow.commit()
-         return ad
+            ad = await u.ads.get_by_id(ad_id)
+            if not ad or ad.status == AdStatus.ARCHIVED:
+                raise AdNotFoundError
+            if ad.user_id != user_id:
+                raise ForbiddenError
+            ad.edit(title, description, price, category, city)
+            await self._uow.ads.save(ad)
+            await self._uow.outbox.add('ad.updated', payload={'ad_id': ad.id})
+            await self._uow.commit()
+            return ad
