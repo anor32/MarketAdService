@@ -24,7 +24,11 @@ class UpdateAd(UpdateAdPort):
                 raise AdNotFoundError
             if ad.user_id != user_id:
                 raise ForbiddenError
-            ad.edit(title, description, price, category, city)
+            args = locals()
+            for key,value in args.items():
+                if value is None:
+                    args[key] = 'd'
+            ad.edit(args['title'], args['description'], args['price'], args['category'], args['city'])
             await self._uow.ads.save(ad)
             await self._uow.outbox.add('ad.updated', payload={'ad_id': ad.id})
             await self._uow.commit()

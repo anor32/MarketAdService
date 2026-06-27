@@ -1,5 +1,7 @@
+from src.application.exceptions import AdNotFoundError, ForbiddenError
 from src.application.ports.uow import UnitOfWork
 from src.application.ports.usecases import DeleteAdPort
+from src.domain.entities import AdStatus
 
 
 class DeleteAd(DeleteAdPort):
@@ -7,4 +9,13 @@ class DeleteAd(DeleteAdPort):
         self._uow = uow
 
     async def execute(self, ad_id: int, user_id: int) -> None:
-        raise NotImplementedError
+        async with self._uow as u:
+            ad = await u.ads.get_by_id(ad_id)
+            if not ad or ad.status == AdStatus.ARCHIVED:
+                raise AdNotFoundError
+            if ad.user_id != user_id:
+                raise ForbiddenError
+            ad.archive()
+            await u.ads.save(ad)
+            await self._uow.outbox.add('ad.deleted', payload={'ad_id': ad.id})
+            await self._uow.commit()
