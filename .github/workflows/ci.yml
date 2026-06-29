@@ -17,6 +17,7 @@ jobs:
       - run: uv run ruff format --check src/ bin/
 
   test:
+    needs: [lint,]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +74,7 @@ jobs:
 
   deploy:
 
-    needs: [ build,test ]
+    needs: [ build,test,lint ]
     runs-on: ubuntu-latest
 
     steps:
