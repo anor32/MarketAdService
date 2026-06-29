@@ -13,7 +13,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && chmod +x /root/.local/bin/uv
+    && pip install uv
 
 WORKDIR /app
 
@@ -26,4 +26,5 @@ RUN uv sync --frozen --no-dev
 
 EXPOSE 8002
 
-CMD ["/root/.local/bin/uv", "run", "python", "-m", "bin.api"]
+
+CMD ["uv", "run", "python", "-m", "bin.api"]
