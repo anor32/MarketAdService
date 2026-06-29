@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
         async with httpx.AsyncClient(timeout=5.0) as client:
             user_profile = AuthServiceUserProfileService(
                 client,
-                settings.auth_service_url,
+                settings.AUTH_SERVICE_URL,
             )
             setup(settings, session_factory, user_profile)
             yield
