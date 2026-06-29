@@ -23,6 +23,3 @@ class Settings(BaseSettings):
             if v.startswith("postgres://") or v.startswith("postgresql://"):
                 v = re.sub(r"^postgres(?:ql)?://", "postgresql+asyncpg://", v)
         return v
-
-
-
