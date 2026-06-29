@@ -77,11 +77,11 @@ class SQLAlchemyAdRepository(AdRepository):
         ad: Ad,
     ) -> None:
         values = asdict(ad)
-        update_values = {k: v for k, v in values.items() if k != 'id'}
+        update_values = {k: v for k, v in values.items() if k != "id"}
         query = (
             insert(AdModel)
             .values(values)
-            .on_conflict_do_update(index_elements=['id'], set_=update_values)
+            .on_conflict_do_update(index_elements=["id"], set_=update_values)
         )
         await self._session.execute(query)
 
