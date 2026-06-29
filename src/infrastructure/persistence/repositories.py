@@ -2,6 +2,7 @@ from dataclasses import asdict
 from typing import List
 
 from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.ports.repositories import AdRepository
@@ -75,9 +76,13 @@ class SQLAlchemyAdRepository(AdRepository):
         self,
         ad: Ad,
     ) -> None:
-
-        model = AdModel(**asdict(ad))
-        self._session.add(model)
+        values = asdict(ad)
+        query = (
+            insert(AdModel)
+            .values(values)
+            .on_conflict_do_update(constraint="ads_pkey", set_=values)
+        )
+        await self._session.execute(query)
 
 
 def _to_entity(model: AdModel) -> Ad:
