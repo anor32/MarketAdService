@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,3 +12,16 @@ class Settings(BaseSettings):
     kafka_bootstrap_servers: str = "localhost:9092"
     kafka_topic_ads: str = "ads"
     auth_service_url: str = "http://localhost:8000"
+
+
+
+print('=== еременные окружения ===')
+print('DATABASE_URL:', os.environ.get('DATABASE_URL'))
+print('POSTGRES_CONNECTION_STRING:', os.environ.get('POSTGRES_CONNECTION_STRING'))
+print()
+
+settings = Settings()
+print('=== начения из Settings ===')
+print('database_url:', settings.database_url)
+print('kafka_bootstrap_servers:', settings.kafka_bootstrap_servers)
+print('auth_service_url:', settings.auth_service_url)
