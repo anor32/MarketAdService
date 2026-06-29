@@ -45,6 +45,8 @@ class SQLAlchemyAdRepository(AdRepository):
         query = select(AdModel).where(AdModel.id == ad_id)
         result = await self._session.execute(query)
         model = result.scalar()
+        if model is None:
+            return None
         return _to_entity(model)
 
     async def list(
