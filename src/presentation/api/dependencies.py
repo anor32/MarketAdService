@@ -65,8 +65,8 @@ def get_current_user_id(
     try:
         payload = jwt.decode(
             credentials.credentials,
-            settings.jwt_secret,
-            algorithms=[settings.jwt_algorithm],
+            settings.JWT_SECRET,
+            algorithms=[settings.JWT_ALGORITHM],
         )
     except jwt.PyJWTError:
         raise HTTPException(
