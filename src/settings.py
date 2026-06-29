@@ -12,3 +12,6 @@ class Settings(BaseSettings):
     KAFKA_BROKERS: str = "localhost:9092"
     KAFKA_TOPIC_MARKETPLACE_ADS: str = "ads"
     AUTH_SERVICE_URL: str = "http://localhost:8000"
+
+
+print(Settings().POSTGRES_CONNECTION_STRING)
