@@ -20,14 +20,14 @@ async def main() -> None:
     session_factory = create_session_factory(engine)
 
     producer = AIOKafkaProducer(
-        bootstrap_servers=settings.kafka_bootstrap_servers,
+        bootstrap_servers=settings.KAFKA_BROKERS,
         value_serializer=serialize,
     )
     await producer.start()
 
     broker = KafkaMessageBroker(
         producer=producer,
-        topic=settings.kafka_topic_ads,
+        topic=settings.KAFKA_TOPIC_MARKETPLACE_ADS,
     )
     relay = OutboxRelay(
         uow_factory=lambda: SQLAlchemyUnitOfWork(session_factory),
